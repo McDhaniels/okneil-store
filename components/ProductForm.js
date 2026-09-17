@@ -76,11 +76,20 @@ export default function ProductForm({ existing }) {
 
     const payload = { name, price, category, color, description, image_url };
 
-    if (existing) {
-      await supabase.from("products").update(payload).eq("id", existing.id);
-    } else {
-      await supabase.from("products").insert(payload);
-    }
+let saveError = null;
+if (existing) {
+  const { error } = await supabase.from("products").update(payload).eq("id", existing.id);
+  saveError = error;
+} else {
+  const { error } = await supabase.from("products").insert(payload);
+  saveError = error;
+}
+
+if (saveError) {
+  alert("Could not save product: " + saveError.message);
+  setSaving(false);
+  return;
+}
 
     setSaving(false);
     router.push("/admin");
