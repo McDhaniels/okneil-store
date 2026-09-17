@@ -117,7 +117,7 @@ nav a:hover, nav a.active{color:var(--ink);}
 .back-link{display:inline-block; margin-bottom:24px; font-size:0.9rem; font-weight:600; color:var(--ink-soft); text-decoration:none;}
 .back-link:hover{color:var(--ink);}
 .product-layout{display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:start;}
-.product-media{aspect-ratio:1; border-radius:6px; overflow:hidden; display:flex; align-items:center; justify-content:center;}
+.product-media{aspect-ratio:1; border-radius:6px; overflow:hidden; display:flex; align-items:center; justify-content:center; position:sticky; top:100px;}
 .product-cat{font-size:0.8rem; font-weight:700; margin-bottom:8px;}
 .product-name{font-size:1.8rem; margin-bottom:10px;}
 .product-price{font-size:1.2rem; color:var(--ink-soft); margin-bottom:20px;}
@@ -172,6 +172,7 @@ footer{border-top:1px solid var(--line); padding:28px 0;}
   .hero-inner{grid-template-columns:1fr; padding-top:8px;}
   .how-steps{grid-template-columns:1fr; gap:22px;}
   .product-layout{grid-template-columns:1fr; gap:24px;}
+  .product-media{position:static;}
   .admin-form{grid-template-columns:1fr;}
   nav{
     position:fixed; top:60px; left:0; right:0; background:var(--bg); flex-direction:column; align-items:flex-start;
