@@ -7,10 +7,11 @@ import { CATEGORIES } from "../lib/categories";
 export default function ProductForm({ existing }) {
   const router = useRouter();
   const [name, setName] = useState(existing?.name || "");
-  const [price, setPrice] = useState(existing?.price || "");
+  const [price, setPrice] = useState(existing?.price ? existing.price.replace(/^[^\d]*/, "") : "");
   const [category, setCategory] = useState(existing?.category || CATEGORIES[0].value);
   const [color, setColor] = useState(existing?.color || CATEGORIES[0].color);
   const [description, setDescription] = useState(existing?.description || "");
+  const [tendoUrl, setTendoUrl] = useState(existing?.tendo_url || "");
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(existing?.image_url || null);
   const [saving, setSaving] = useState(false);
@@ -74,22 +75,22 @@ export default function ProductForm({ existing }) {
       image_url = urlData.publicUrl;
     }
 
-    const payload = { name, price, category, color, description, image_url };
+    const payload = { name, price, category, color, description, image_url, tendo_url: tendoUrl };
 
-let saveError = null;
-if (existing) {
-  const { error } = await supabase.from("products").update(payload).eq("id", existing.id);
-  saveError = error;
-} else {
-  const { error } = await supabase.from("products").insert(payload);
-  saveError = error;
-}
+    let saveError = null;
+    if (existing) {
+      const { error } = await supabase.from("products").update(payload).eq("id", existing.id);
+      saveError = error;
+    } else {
+      const { error } = await supabase.from("products").insert(payload);
+      saveError = error;
+    }
 
-if (saveError) {
-  alert("Could not save product: " + saveError.message);
-  setSaving(false);
-  return;
-}
+    if (saveError) {
+      alert("Could not save product: " + saveError.message);
+      setSaving(false);
+      return;
+    }
 
     setSaving(false);
     router.push("/admin");
@@ -105,7 +106,10 @@ if (saveError) {
       </div>
       <div>
         <label>Price</label>
-        <input type="text" placeholder="GHS 100" value={price} onChange={e => setPrice(e.target.value)} required />
+        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+          <span style={{ fontWeight: 600, color: "var(--ink-soft)" }}>GH₵</span>
+          <input type="text" placeholder="100" value={price} onChange={e => setPrice(e.target.value)} required />
+        </div>
       </div>
       <div>
         <label>Category</label>
@@ -124,6 +128,10 @@ if (saveError) {
       <div className="full">
         <label>Description (shown on the product's own page)</label>
         <textarea value={description} onChange={e => setDescription(e.target.value)} placeholder="Copy this from the Tendo listing, then reword it a little in your own voice." />
+      </div>
+      <div className="full">
+        <label>Tendo product link (for the "Buy on Tendo" button)</label>
+        <input type="url" placeholder="https://tendo.app/product/..." value={tendoUrl} onChange={e => setTendoUrl(e.target.value)} />
       </div>
       <div className="full">
         <label>Photo</label>

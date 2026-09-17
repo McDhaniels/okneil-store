@@ -62,7 +62,7 @@ export default function AdminDashboard() {
               ) : (
                 <span style={{ width: 12, height: 12, borderRadius: "50%", background: cat.color, flexShrink: 0 }} />
               )}
-              <span className="info"><b>{p.name}</b><span>{cat.label} · {p.price}</span></span>
+              <span className="info"><b>{p.name}</b><span>{cat.label} · GH₵ {p.price}</span></span>
               <span className="row-actions">
                 <Link href={`/admin/edit/${p.id}`}>Edit</Link>
                 <button onClick={() => handleDelete(p.id, p.image_url)}>Delete</button>

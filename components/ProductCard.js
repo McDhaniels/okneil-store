@@ -18,7 +18,7 @@ export default function ProductCard({ product }) {
       <div className="card-body">
         <span className="card-cat">{cat.label}</span>
         <span className="card-name">{product.name}</span>
-        <span className="card-price">{product.price}</span>
+        <span className="card-price">GH₵ {product.price}</span>
       </div>
     </Link>
   );

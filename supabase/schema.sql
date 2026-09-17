@@ -35,3 +35,6 @@ create policy "Authenticated users can delete products"
   on products for delete
   to authenticated
   using (true);
+
+-- Added later: a real Tendo product link per product
+alter table products add column if not exists tendo_url text;

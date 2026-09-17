@@ -42,13 +42,15 @@ export default async function ProductPage({ params }) {
         <div>
           <div className="product-cat" style={{ color: cat.color }}>{cat.label}</div>
           <h1 className="product-name">{product.name}</h1>
-          <div className="product-price">{product.price}</div>
+          <div className="product-price">GH₵ {product.price}</div>
           <p className="product-desc">
             {product.description || "Message us on WhatsApp for full details on this one — sizing, delivery time, or anything else you need to know before ordering."}
           </p>
           <div className="product-actions">
             <a href={`https://wa.me/${WHATSAPP_NUMBER}?text=${waText}`} className="btn btn-wa">Message on WhatsApp</a>
-            <a href="#" className="btn btn-tendo">Buy on Tendo</a>
+            {product.tendo_url && (
+              <a href={product.tendo_url} target="_blank" rel="noopener noreferrer" className="btn btn-tendo">Buy on Tendo</a>
+            )}
           </div>
         </div>
       </div>
