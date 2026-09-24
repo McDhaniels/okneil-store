@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { supabase } from "../lib/supabaseClient";
 import ProductCard from "../components/ProductCard";
+import AdBanner from "../components/AdBanner";
 import { WHATSAPP_NUMBER } from "../lib/config";
 
 export const revalidate = 0;
@@ -53,6 +54,8 @@ export default async function HomePage() {
           {(products || []).map(p => <ProductCard product={p} key={p.id} />)}
         </div>
       </section>
+
+      <AdBanner />
     </>
   );
 }

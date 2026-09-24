@@ -4,6 +4,7 @@ import { categoryMeta } from "../../../lib/categories";
 import { WHATSAPP_NUMBER } from "../../../lib/config";
 import ExpandableDescription from "../../../components/ExpandableDescription";
 import ProductCard from "../../../components/ProductCard";
+import SaveButton from "../../../components/SaveButton";
 
 export const revalidate = 0;
 
@@ -58,6 +59,7 @@ export default async function ProductPage({ params }) {
             {product.tendo_url && (
               <a href={product.tendo_url} target="_blank" rel="noopener noreferrer" className="btn btn-tendo">Buy on Tendo</a>
             )}
+            <SaveButton productId={product.id} variant="button" />
           </div>
         </div>
       </div>
