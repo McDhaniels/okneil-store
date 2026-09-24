@@ -11,7 +11,13 @@ export default function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 12);
+    const onScroll = () => {
+      setScrolled(prev => {
+        if (window.scrollY > 40) return true;
+        if (window.scrollY < 10) return false;
+        return prev; // stay in current state inside the buffer zone, avoids flicker
+      });
+    };
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
