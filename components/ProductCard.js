@@ -1,11 +1,13 @@
 import Link from "next/link";
 import { categoryMeta } from "../lib/categories";
+import SaveButton from "./SaveButton";
 
 export default function ProductCard({ product }) {
   const cat = categoryMeta(product.category);
   return (
     <Link href={`/product/${product.id}`} className="card" style={{ "--cat-color": cat.color }}>
-      <div className="card-media" style={{ "--tile-bg": cat.tile }}>
+      <div className="card-media" style={{ "--tile-bg": cat.tile, position: "relative" }}>
+        <SaveButton productId={product.id} variant="overlay" />
         {product.image_url ? (
           <img src={product.image_url} alt={product.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
         ) : (

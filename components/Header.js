@@ -3,12 +3,14 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { supabase } from "../lib/supabaseClient";
+import { getWishlistIds } from "../lib/wishlist";
 
 export default function Header() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [navOpen, setNavOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [wishlistCount, setWishlistCount] = useState(0);
 
   useEffect(() => {
     const onScroll = () => {
@@ -30,6 +32,13 @@ export default function Header() {
     return () => sub.subscription.unsubscribe();
   }, []);
 
+  useEffect(() => {
+    const updateCount = () => setWishlistCount(getWishlistIds().length);
+    updateCount();
+    window.addEventListener("wishlist-updated", updateCount);
+    return () => window.removeEventListener("wishlist-updated", updateCount);
+  }, []);
+
   const links = [
     { href: "/", label: "Home" },
     { href: "/shop", label: "Shop" },
@@ -48,6 +57,18 @@ export default function Header() {
               {l.label}
             </Link>
           ))}
+          <Link href="/wishlist" onClick={() => setNavOpen(false)} style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            Saved
+            {wishlistCount > 0 && (
+              <span style={{
+                background: "var(--accent)", color: "#fff", borderRadius: "50%",
+                width: 18, height: 18, fontSize: "0.72rem", fontWeight: 700,
+                display: "flex", alignItems: "center", justifyContent: "center"
+              }}>
+                {wishlistCount}
+              </span>
+            )}
+          </Link>
           <Link href={isLoggedIn ? "/admin" : "/admin/login"} className="admin-btn" onClick={() => setNavOpen(false)}>
             {isLoggedIn ? "Manage products" : "Admin"}
           </Link>
