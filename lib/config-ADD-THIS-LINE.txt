@@ -1,6 +1,0 @@
-// lib/config.js — DO NOT overwrite your real file with this.
-// This only shows the ONE new line to add: the WHATSAPP_NUMBER_IS_PLACEHOLDER safeguard.
-// Open your real lib/config.js and add this line right after your WHATSAPP_NUMBER line:
-
-export const WHATSAPP_NUMBER_IS_PLACEHOLDER = WHATSAPP_NUMBER === "000000000000";
-
