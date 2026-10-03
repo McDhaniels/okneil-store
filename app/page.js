@@ -7,11 +7,14 @@ import { WHATSAPP_NUMBER } from "../lib/config";
 export const revalidate = 0;
 
 export default async function HomePage() {
-  const { data: products } = await supabase
+  const { data: products, error } = await supabase
     .from("products")
     .select("*")
     .order("created_at", { ascending: false })
     .limit(4);
+
+  const safeProducts = products || [];
+  const loadFailed = !!error;
 
   return (
     <>
@@ -50,9 +53,15 @@ export default async function HomePage() {
           <h2>What's in stock</h2>
           <Link href="/shop" className="btn btn-outline">See everything</Link>
         </div>
-        <div className="grid">
-          {(products || []).map(p => <ProductCard product={p} key={p.id} />)}
-        </div>
+        {loadFailed ? (
+          <p style={{ color: "var(--ink-soft)" }}>Couldn't load products right now — try refreshing the page.</p>
+        ) : safeProducts.length === 0 ? (
+          <p style={{ color: "var(--ink-soft)" }}>New stock coming soon.</p>
+        ) : (
+          <div className="grid">
+            {safeProducts.map(p => <ProductCard product={p} key={p.id} />)}
+          </div>
+        )}
       </section>
 
       <AdBanner />

@@ -22,13 +22,21 @@ export default function AdminDashboard() {
   }, []);
 
   async function loadProducts() {
-    const { data } = await supabase.from("products").select("*").order("created_at", { ascending: false });
+    const { data, error } = await supabase.from("products").select("*").order("created_at", { ascending: false });
+    if (error) {
+      alert("Couldn't load products: " + error.message);
+      return;
+    }
     setProducts(data || []);
   }
 
   async function handleDelete(id, imageUrl) {
     if (!confirm("Delete this product?")) return;
-    await supabase.from("products").delete().eq("id", id);
+    const { error } = await supabase.from("products").delete().eq("id", id);
+    if (error) {
+      alert("Couldn't delete product: " + error.message);
+      return;
+    }
     if (imageUrl) {
       const path = imageUrl.split("/product-photos/")[1];
       if (path) await supabase.storage.from("product-photos").remove([path]);

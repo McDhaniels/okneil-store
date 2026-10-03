@@ -33,17 +33,22 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function ProductPage({ params }) {
-  const { data: product } = await supabase
+  const { data: product, error } = await supabase
     .from("products")
     .select("*")
     .eq("id", params.id)
     .single();
 
   if (!product) {
+    const isRealNotFound = error?.code === "PGRST116"; // Supabase's "no row found" code
     return (
       <div className="wrap product-page">
         <Link href="/shop" className="back-link">&larr; Back to shop</Link>
-        <p>That product is no longer available.</p>
+        <p>
+          {isRealNotFound
+            ? "That product is no longer available."
+            : "Couldn't load this product right now — try refreshing the page."}
+        </p>
       </div>
     );
   }

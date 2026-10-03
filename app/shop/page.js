@@ -8,14 +8,16 @@ export default function ShopPage() {
   const [products, setProducts] = useState([]);
   const [filter, setFilter] = useState("all");
   const [loading, setLoading] = useState(true);
+  const [loadFailed, setLoadFailed] = useState(false);
 
   useEffect(() => {
     supabase
       .from("products")
       .select("*")
       .order("created_at", { ascending: false })
-      .then(({ data }) => {
+      .then(({ data, error }) => {
         setProducts(data || []);
+        setLoadFailed(!!error);
         setLoading(false);
       });
   }, []);
@@ -39,6 +41,8 @@ export default function ShopPage() {
         </div>
         {loading ? (
           <p style={{ color: "var(--ink-soft)" }}>Loading products…</p>
+        ) : loadFailed ? (
+          <p style={{ color: "var(--ink-soft)" }}>Couldn't load products right now — try refreshing the page.</p>
         ) : filtered.length === 0 ? (
           <p style={{ color: "var(--ink-soft)" }}>No products in this category yet.</p>
         ) : (
