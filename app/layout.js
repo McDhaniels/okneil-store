@@ -2,10 +2,20 @@ import "./globals.css";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import FloatingWhatsApp from "../components/FloatingWhatsApp";
+import { Analytics } from "@vercel/analytics/react";
+import { SITE_URL } from "../lib/config";
 
 export const metadata = {
-  title: "O'Kneil Store",
-  description: "Fashion, beauty, electronics, and everyday essentials. Message us on WhatsApp or buy directly through Tendo."
+  ...(SITE_URL ? { metadataBase: new URL(SITE_URL) } : {}),
+  title: {
+    default: "O'Kneil Store",
+    template: "%s | O'Kneil Store"
+  },
+  description: "Fashion, beauty, electronics, and everyday essentials. Message us on WhatsApp or buy directly through Tendo.",
+  openGraph: {
+    siteName: "O'Kneil Store",
+    type: "website"
+  }
 };
 
 export default function RootLayout({ children }) {
@@ -21,6 +31,7 @@ export default function RootLayout({ children }) {
         <main>{children}</main>
         <Footer />
         <FloatingWhatsApp />
+        <Analytics />
       </body>
     </html>
   );

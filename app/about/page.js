@@ -1,3 +1,8 @@
+export const metadata = {
+  title: "About",
+  description: "O'Kneil Store sources products through Tendo and sells them online — real stock, fair pricing, no inventory markup games."
+};
+
 export default function AboutPage() {
   return (
     <div className="about">

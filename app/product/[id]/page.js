@@ -8,6 +8,30 @@ import SaveButton from "../../../components/SaveButton";
 
 export const revalidate = 0;
 
+export async function generateMetadata({ params }) {
+  const { data: product } = await supabase
+    .from("products")
+    .select("name, price, description, image_url")
+    .eq("id", params.id)
+    .single();
+
+  if (!product) return { title: "Product not found" };
+
+  const description = product.description
+    ? product.description.slice(0, 160)
+    : `GH₵ ${product.price} — available now at O'Kneil Store.`;
+
+  return {
+    title: product.name,
+    description,
+    openGraph: {
+      title: product.name,
+      description,
+      images: product.image_url ? [{ url: product.image_url }] : []
+    }
+  };
+}
+
 export default async function ProductPage({ params }) {
   const { data: product } = await supabase
     .from("products")

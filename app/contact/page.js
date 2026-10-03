@@ -1,5 +1,10 @@
 import { WHATSAPP_NUMBER, SOCIALS } from "../../lib/config";
 
+export const metadata = {
+  title: "Contact",
+  description: "Message O'Kneil Store on WhatsApp to ask about a product or place an order."
+};
+
 export default function ContactPage() {
   return (
     <div className="contact">

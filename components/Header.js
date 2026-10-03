@@ -17,7 +17,7 @@ export default function Header() {
       setScrolled(prev => {
         if (window.scrollY > 40) return true;
         if (window.scrollY < 10) return false;
-        return prev; // stay in current state inside the buffer zone, avoids flicker
+        return prev;
       });
     };
     window.addEventListener("scroll", onScroll);
