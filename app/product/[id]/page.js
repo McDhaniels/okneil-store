@@ -5,6 +5,7 @@ import { WHATSAPP_NUMBER } from "../../../lib/config";
 import ExpandableDescription from "../../../components/ExpandableDescription";
 import ProductCard from "../../../components/ProductCard";
 import SaveButton from "../../../components/SaveButton";
+import TrackedLink from "../../../components/TrackedLink";
 
 export const revalidate = 0;
 
@@ -84,9 +85,25 @@ export default async function ProductPage({ params }) {
           <div className="product-price">GH₵ {product.price}</div>
           <ExpandableDescription text={descriptionText} />
           <div className="product-actions">
-            <a href={`https://wa.me/${WHATSAPP_NUMBER}?text=${waText}`} className="btn btn-wa">Message on WhatsApp</a>
+            <TrackedLink
+              href={`https://wa.me/${WHATSAPP_NUMBER}?text=${waText}`}
+              eventName="whatsapp_click"
+              eventData={{ source: "product_page", productId: product.id, productName: product.name }}
+              className="btn btn-wa"
+            >
+              Message on WhatsApp
+            </TrackedLink>
             {product.tendo_url && (
-              <a href={product.tendo_url} target="_blank" rel="noopener noreferrer" className="btn btn-tendo">Buy on Tendo</a>
+              <TrackedLink
+                href={product.tendo_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                eventName="tendo_click"
+                eventData={{ productId: product.id, productName: product.name }}
+                className="btn btn-tendo"
+              >
+                Buy on Tendo
+              </TrackedLink>
             )}
             <SaveButton productId={product.id} variant="button" />
           </div>
