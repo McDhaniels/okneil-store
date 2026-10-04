@@ -12,6 +12,7 @@ export default function AboutPage() {
       <p>Here's exactly how ordering works: you browse products here, then either message us on WhatsApp to place an order, or go straight to a product's Tendo link to order it yourself. Either way, your order, payment, and delivery are all handled directly by Tendo — not by us. We're simply showing you what's available and helping you find it.</p>
       <p>Delivery time depends on the product and your location — Tendo will confirm an estimate once your order is placed.</p>
       <p>If anything goes wrong with an order — a delay, a damaged item, a delivery issue — that's handled directly through Tendo, since they're the ones processing the payment and delivery. Message us if you're ever unsure who to contact, and we'll point you the right way.</p>
+      <p style={{ fontSize: "0.85rem" }}>A note on privacy: we don't collect accounts, payment details, or personal data on this site. Saved items are stored only in your own browser, not sent to us. Any order details you share happen directly in WhatsApp or with Tendo.</p>
     </div>
   );
 }
