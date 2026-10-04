@@ -2,6 +2,7 @@ import Link from "next/link";
 import { supabase } from "../lib/supabaseClient";
 import ProductCard from "../components/ProductCard";
 import AdBanner from "../components/AdBanner";
+import TrackedLink from "../components/TrackedLink";
 import { WHATSAPP_NUMBER } from "../lib/config";
 
 export const revalidate = 0;
@@ -25,7 +26,7 @@ export default async function HomePage() {
             <p>Fashion, beauty, electronics, and everyday essentials. Browse what's here, then message us on WhatsApp to order, or buy straight from Tendo if you'd rather skip the chat.</p>
             <div className="hero-actions">
               <Link href="/shop" className="btn btn-primary">Browse products</Link>
-              <a href={`https://wa.me/${WHATSAPP_NUMBER}`} className="btn btn-outline-dark">Message on WhatsApp</a>
+              <TrackedLink href={`https://wa.me/${WHATSAPP_NUMBER}`} eventName="whatsapp_click" eventData={{ source: "home_hero" }} className="btn btn-outline-dark">Message on WhatsApp</TrackedLink>
             </div>
           </div>
           <div className="hero-grid" aria-hidden="true">
