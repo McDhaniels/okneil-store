@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { track } from "@vercel/analytics";
 import { isSaved, toggleSaved } from "../lib/wishlist";
 
 export default function SaveButton({ productId, variant = "overlay" }) {
@@ -13,7 +14,9 @@ export default function SaveButton({ productId, variant = "overlay" }) {
     e.preventDefault();
     e.stopPropagation();
     const next = toggleSaved(productId);
-    setSaved(next.includes(productId));
+    const nowSaved = next.includes(productId);
+    setSaved(nowSaved);
+    track(nowSaved ? "wishlist_add" : "wishlist_remove", { productId });
   }
 
   const heart = (

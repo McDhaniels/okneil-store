@@ -27,8 +27,29 @@ export default function ProductForm({ existing }) {
   function handleFile(e) {
     const f = e.target.files[0];
     if (!f) return;
+    if (!f.type.startsWith("image/")) {
+      alert("Please choose an image file.");
+      e.target.value = "";
+      return;
+    }
+    const maxBytes = 8 * 1024 * 1024; // 8MB, before compression
+    if (f.size > maxBytes) {
+      alert("That photo is too large (max 8MB). Try a smaller one.");
+      e.target.value = "";
+      return;
+    }
     setFile(f);
     setPreview(URL.createObjectURL(f));
+  }
+
+  function isValidTendoUrl(url) {
+    if (!url) return true; // optional field, blank is fine
+    try {
+      const parsed = new URL(url);
+      return parsed.protocol === "https:" && parsed.hostname.includes("tendo");
+    } catch {
+      return false;
+    }
   }
 
   function compressImage(file) {
@@ -56,9 +77,16 @@ export default function ProductForm({ existing }) {
 
   async function handleSubmit(e) {
     e.preventDefault();
+
+    if (!isValidTendoUrl(tendoUrl)) {
+      alert("That Tendo link doesn't look right — it should start with https:// and be an actual Tendo product link. Leave it blank if you don't have one yet.");
+      return;
+    }
+
     setSaving(true);
 
     let image_url = existing?.image_url || null;
+    let uploadedFilePath = null; // tracked so we can clean up if the save fails below
 
     if (file) {
       const compressed = await compressImage(file);
@@ -71,6 +99,7 @@ export default function ProductForm({ existing }) {
         setSaving(false);
         return;
       }
+      uploadedFilePath = filePath;
       const { data: urlData } = supabase.storage.from("product-photos").getPublicUrl(filePath);
       image_url = urlData.publicUrl;
     }
@@ -87,6 +116,10 @@ export default function ProductForm({ existing }) {
     }
 
     if (saveError) {
+      // The DB write failed — if we just uploaded a photo for it, don't leave it orphaned in storage.
+      if (uploadedFilePath) {
+        await supabase.storage.from("product-photos").remove([uploadedFilePath]);
+      }
       alert("Could not save product: " + saveError.message);
       setSaving(false);
       return;
@@ -132,6 +165,7 @@ export default function ProductForm({ existing }) {
       <div className="full">
         <label>Tendo product link (for the "Buy on Tendo" button)</label>
         <input type="url" placeholder="https://tendo.app/product/..." value={tendoUrl} onChange={e => setTendoUrl(e.target.value)} />
+        <span style={{ fontSize: "0.78rem", color: "var(--ink-soft)" }}>Must be a real Tendo link (https://...tendo...) — leave blank if you don't have one yet.</span>
       </div>
       <div className="full">
         <label>Photo</label>
