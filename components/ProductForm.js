@@ -46,7 +46,9 @@ export default function ProductForm({ existing }) {
     if (!url) return true; // optional field, blank is fine
     try {
       const parsed = new URL(url);
-      return parsed.protocol === "https:" && parsed.hostname.includes("tendo");
+      // Tendo's share links use their own short domain (e.g. myduke.co), so we only
+      // require a secure, well-formed web address rather than guessing the domain.
+      return parsed.protocol === "https:" && parsed.hostname.includes(".");
     } catch {
       return false;
     }
@@ -79,7 +81,7 @@ export default function ProductForm({ existing }) {
     e.preventDefault();
 
     if (!isValidTendoUrl(tendoUrl)) {
-      alert("That Tendo link doesn't look right — it should start with https:// and be an actual Tendo product link. Leave it blank if you don't have one yet.");
+      alert("That link doesn't look right — it should be a full web address starting with https://. Copy it again from Tendo, or leave it blank if you don't have one yet.");
       return;
     }
 
@@ -164,8 +166,8 @@ export default function ProductForm({ existing }) {
       </div>
       <div className="full">
         <label>Tendo product link (for the "Buy on Tendo" button)</label>
-        <input type="url" placeholder="https://tendo.app/product/..." value={tendoUrl} onChange={e => setTendoUrl(e.target.value)} />
-        <span style={{ fontSize: "0.78rem", color: "var(--ink-soft)" }}>Must be a real Tendo link (https://...tendo...) — leave blank if you don't have one yet.</span>
+        <input type="url" placeholder="https://..." value={tendoUrl} onChange={e => setTendoUrl(e.target.value)} />
+        <span style={{ fontSize: "0.78rem", color: "var(--ink-soft)" }}>Paste the product's share link from Tendo (must start with https://). Leave blank if you don't have one yet.</span>
       </div>
       <div className="full">
         <label>Photo</label>
